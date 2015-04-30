@@ -311,4 +311,23 @@ public class Player
 	{
 		return this.currentMoneyBet;
 	}
+	
+	public void reset()
+	{
+		this.currentCards.clear();
+		this.currentHandValue = 0;
+		this.currentMoneyBet = 0;
+	}
+	
+	public void Wins(int n)
+	{
+		this.totalMoney = n;
+		this.moneyWon += n;
+	}
+	
+	public void Lose(int n)
+	{
+		this.totalMoney -= n;
+		this.moneyLost += n;
+	}
 }

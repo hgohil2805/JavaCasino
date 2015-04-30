@@ -99,6 +99,15 @@ public class BlackJackGame extends Game
 	public void resetGame() 
 	{
 		this.currentRoundPlayers = this.currentPlayers;
+		for(Player p : currentPlayers)
+		{
+			p.reset();
+			if(p.getTotalMoney() <= 0)
+			{
+				this.currentRoundPlayers.remove(p);
+				this.currentPlayers.remove(p);
+			}
+		}
 	}
 	
 	public Player getWinner()
