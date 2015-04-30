@@ -51,6 +51,7 @@ public class HandValue
 						}
 					}
 				}
+				
 				else if (c.getValue() > 10)
 				{
 					value += 10;

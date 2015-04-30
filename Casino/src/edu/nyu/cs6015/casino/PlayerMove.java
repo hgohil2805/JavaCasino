@@ -1,12 +1,12 @@
 package edu.nyu.cs6015.casino;
 
-public enum Suit 
+public enum PlayerMove 
 {
-	Hearts("Hearts"), Diamonds("Diamonds"), Spades("Spade"), Clubs("Clubs");
+	Raise("Raise"), Check("Check"), Fold("Fold"), Call("Call"), AllIn("AllIn");
 	
 	private String name;
 	
-	private Suit(String name)
+	private PlayerMove(String name)
 	{
 		this.name = name;
 	}
@@ -15,5 +15,4 @@ public enum Suit
 	{
 		return this.name;
 	}
-	
 }

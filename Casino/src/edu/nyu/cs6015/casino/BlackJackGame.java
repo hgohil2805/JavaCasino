@@ -14,7 +14,7 @@ public class BlackJackGame extends Game
 		// TODO Auto-generated method stub
 		Deck currentDeck = decksUsed.get(0);
 		currentDeck.shuffleDeck();
-		boolean raise;
+		boolean raise = true;
 		for(int i=0 ; i < 2;i++)
 		{
 			for(Player p : this.currentRoundPlayers)
@@ -22,15 +22,40 @@ public class BlackJackGame extends Game
 				p.addCard(currentDeck.getTop());
 			}
 		}
-		for(Player p: this.currentRoundPlayers)
+		
+		int currentPotRaise = 0;
+		one: while(raise)
 		{
-			p.calculateCurrentHandValue();
-			Move currentMove = p.makeMove();
-			if(currentMove.getMoveName().equals("raise"))
+			Move currentMove = new Move(PlayerMove.Check,0);
+			two :for(Player p : this.currentRoundPlayers)
 			{
-				raise = true;
+				if(p.currentMoneyBet == currentPotRaise )
+				{
+					raise = false;
+					currentMove = p.makeMove();
+				}
+				else if(currentPotRaise > p.currentMoneyBet)
+				{
+					currentMove = p.forceRaise(currentPotRaise - p.currentMoneyBet); 
+				}
+				
+				if(currentMove.getMove().equals(PlayerMove.Check))
+				{
+					continue two;
+				}
+				else if(currentMove.getMove().equals(PlayerMove.Fold))
+				{
+					this.currentRoundPlayers.remove(p);
+					p.setMoneyLost(p.currentMoneyBet);
+				}
+				else if(currentMove.getMove().equals(PlayerMove.Raise))
+				{
+					currentPotRaise += currentMove.getBet();
+				}
+				
 			}
 		}
+		
 		}
 
 	@Override

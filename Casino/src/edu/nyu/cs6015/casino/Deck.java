@@ -15,6 +15,7 @@ public class Deck
 	private static Random rand = new Random();
 	public Deck()
 	{
+		
 		unsortedCards = new Card[52];
 		System.out.println("Creating a list of cards for the current deck");
 		int currentCard = 0;

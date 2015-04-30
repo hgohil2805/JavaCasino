@@ -92,13 +92,13 @@ public class Player
 		System.out.println("\n 1 to check \n 2 to raise \n 3 to fold ");
 		int input;
 		input = in.nextInt();
-		Move currentMove = new Move ("noMoney",0);
+		Move currentMove = new Move (PlayerMove.Check,0);
 		switch(input)
 		{
 		case 1: 
 		{
 			System.out.println("You have selected to check");
-			currentMove.setMoveName("check");
+			currentMove.setMove(PlayerMove.Check);
 			currentMove.setBet(0);
 			break;
 		}
@@ -120,7 +120,7 @@ public class Player
 		case 3:
 		{
 			System.out.println("You have selected to fold like a bitch");
-			currentMove.setMoveName("fold");
+			currentMove.setMove(PlayerMove.Fold);
 			currentMove.setBet(0);
 			this.Fold();
 			break;
@@ -136,13 +136,13 @@ public class Player
 	
 	public void checkMove()
 	{
-		Move checkMove = new Move("check",0);
+		Move checkMove = new Move(PlayerMove.Check,0);
 		System.out.println("checked" + checkMove);
 	}
 	
 	public Move raiseMove(int toRaise)
 	{
-		Move raiseMove = new Move("raise",0);
+		Move raiseMove = new Move(PlayerMove.Raise,0);
 		one:while(true)
 		{
 		System.out.println("\n Press \n 1 to raise 20 \n 2 to raise 40 \n 3 to raise 100 \n 4 to enter your own number \n 5 to cancel raise");
@@ -263,43 +263,52 @@ public class Player
 	}
 	
 	
-	public void forceRaise(int n)
+	public Move forceRaise(int n)
 	{
 		one: while(true)
 		{
 		System.out.format("The other players have raised %d, \n press 1 to raise equal  \n 2 to fold \n 3 to raise more \n 4 to go all in",n);
 		int userInput = in.nextInt();
+		Move playerMove = new Move(PlayerMove.Check,0);
 		if(userInput == 1 && n<this.totalMoney)
 		{
 			System.out.format("Raising by %d",n);
-			Move playerMove = new Move("raise",n);
+			playerMove = new Move(PlayerMove.Raise,n);
 			this.currentMoneyBet += n;
 			this.totalMoney -= n;
+		}
+		else if(userInput == 2)
+		{
+			playerMove.setBet(0);
+			playerMove.setMove(PlayerMove.Fold);
+			this.Fold();
+		}
+		else if(userInput == 3 && n < this.totalMoney )
+		{
+			return this.raiseMove(n);
+		}
+		else if(userInput == 4 && n < this.totalMoney)
+		{
+			this.currentMoneyBet += n;
+			this.totalMoney -= n;
+			return this.goAllIn();
 		}
 		else
 		{
 			System.out.println("You do not have enough money to match the bid");
 			continue one;
 		}
-		if(userInput == 2)
-		{
-			this.Fold();
-		}
-		else if(userInput == 3 && n < this.totalMoney )
-			{
-				this.raiseMove(n);
-			}
-		else if(userInput == 4 && n < this.totalMoney)
-		{
-			this.currentMoneyBet += n;
-			this.totalMoney -= n;
-			this.goAllIn();
-		}
 		}
 	}
 	
-	public void goAllIn()
+	public Move goAllIn()
 	{
-		Move playerMove = new Move("allin",this.totalMoney - this.currentMoneyBet);
+		Move playerMove = new Move(PlayerMove.AllIn,this.totalMoney - this.currentMoneyBet);
+		return playerMove;
+	}
+	
+	public int getCurrentBet()
+	{
+		return this.currentMoneyBet;
 	}
 }

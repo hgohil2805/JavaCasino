@@ -2,29 +2,30 @@ package edu.nyu.cs6015.casino;
 
 public class Move 
 {
-	String moveName;
+	PlayerMove currentMove;
 	int moneyBet;
 	
-	public Move(String name, int bet)
+	public Move(PlayerMove name, int bet)
 	{
-		this.moveName = name;
+		this.currentMove = name;
 		this.moneyBet = bet;
 	}
 	
 	public String toString()
 	{
-		return this.moveName + " " + this.moneyBet;
+		return this.currentMove + " " + this.moneyBet;
 	}
 	
 	
-	public void setMoveName(String move)
+	public void setMove(PlayerMove move)
 	{
-		this.moveName = move;
+		this.currentMove = move;
 	}
 	
-	public String getMoveName()
+	
+	public PlayerMove getMove()
 	{
-		return this.moveName;
+		return this.currentMove;
 	}
 	
 	public void setBet(int n)
