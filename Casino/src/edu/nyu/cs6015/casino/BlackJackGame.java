@@ -48,6 +48,10 @@ public class BlackJackGame extends Game
 					this.currentRoundPlayers.remove(p);
 					p.setMoneyLost(p.currentMoneyBet);
 				}
+				else if(currentMove.getMove().equals(PlayerMove.Call))
+				{
+					continue two;
+				}
 				else if(currentMove.getMove().equals(PlayerMove.Raise))
 				{
 					currentPotRaise += currentMove.getBet();

@@ -273,7 +273,7 @@ public class Player
 		if(userInput == 1 && n<this.totalMoney)
 		{
 			System.out.format("Raising by %d",n);
-			playerMove = new Move(PlayerMove.Raise,n);
+			playerMove = new Move(PlayerMove.Call,n);
 			this.currentMoneyBet += n;
 			this.totalMoney -= n;
 		}
