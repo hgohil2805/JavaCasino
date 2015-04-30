@@ -12,6 +12,7 @@ public class BlackJackGame extends Game
 	@Override
 	public void startGame() 
 	{
+		Player Dealer = new Player("Dealer",25,1000,this);
 		// TODO Auto-generated method stub
 		Deck currentDeck = decksUsed.get(0);
 		currentDeck.sortDeck();
@@ -75,8 +76,20 @@ public class BlackJackGame extends Game
 				}
 				
 			}
+			Player currentWinner = this.getWinner();
+			int currentWinnerValue = HandValue.getHandValue(currentWinner.getCards(),null, this);
 			
-			System.out.println("The winner is " + this.getWinner().getName());
+			Dealer.addCard(currentDeck.getTop());
+			Dealer.addCard(currentDeck.getTop());
+			int dealerHand = HandValue.getHandValue(Dealer.getCards(),null, this);
+			if(currentWinnerValue > dealerHand)
+			{
+				System.out.println("The current winner is " + this.getWinner().getName());
+			}
+			else
+			{
+				System.out.println("Dealer wins!!!");
+			}
 			break one;
 		}
 		}
@@ -126,6 +139,7 @@ public class BlackJackGame extends Game
 			int currentPlayerValue = HandValue.getHandValue(currentPlayer.getCards(),null, this);
 			if(winnerValue < currentPlayerValue)
 			{
+				Winner.Lose(Winner.currentMoneyBet);
 				Winner = currentPlayer;
 				winnerValue = currentPlayerValue;
 			}
