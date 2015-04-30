@@ -13,6 +13,7 @@ public class BlackJackGame extends Game
 	{
 		// TODO Auto-generated method stub
 		Deck currentDeck = decksUsed.get(0);
+		currentDeck.sortDeck();
 		currentDeck.shuffleDeck();
 		boolean raise = true;
 		for(int i=0 ; i < 2;i++)
@@ -54,11 +55,24 @@ public class BlackJackGame extends Game
 				}
 				else if(currentMove.getMove().equals(PlayerMove.Raise))
 				{
-					currentPotRaise += currentMove.getBet();
+					int moveMoney = currentPotRaise - currentMove.getBet();
+					raise = true;
+					if(moveMoney > 0)
+					{
+						currentPotRaise += moveMoney;
+					}
+					else
+					{
+						currentPotRaise += currentMove.getBet();
+					}
 				}
 				
 			}
+			
+			System.out.println("The winner is " + this.getWinner().getName());
 		}
+		
+		
 		
 		}
 
@@ -84,8 +98,23 @@ public class BlackJackGame extends Game
 	@Override
 	public void resetGame() 
 	{
-		// TODO Auto-generated method stub
-		
+		this.currentRoundPlayers = this.currentPlayers;
+	}
+	
+	public Player getWinner()
+	{
+		Player Winner =this.currentRoundPlayers.get(0);
+		int winnerValue = HandValue.getHandValue(Winner.currentCards,null, this);
+		for(Player currentPlayer:this.currentRoundPlayers)
+		{
+			int currentPlayerValue = HandValue.getHandValue(currentPlayer.getCards(),null, this);
+			if(winnerValue < currentPlayerValue)
+			{
+				Winner = currentPlayer;
+				winnerValue = currentPlayerValue;
+			}
+		}
+		return Winner;
 	}
 
 }
