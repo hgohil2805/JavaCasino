@@ -20,7 +20,7 @@ public class HandValue
 		{
 			for(Card c: playerCard)
 			{
-				if(c.getValue() == 1)
+				if(c.getValue() == 1 && playerCard.size() > 1)
 				{
 					System.out.println("You've got an ace!");
 					if(playerCard.size() > 1)

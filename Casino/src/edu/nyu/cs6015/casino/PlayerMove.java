@@ -2,7 +2,7 @@ package edu.nyu.cs6015.casino;
 
 public enum PlayerMove 
 {
-	Raise("Raise"), Check("Check"), Fold("Fold"), Call("Call"), AllIn("AllIn");
+	Raise("Raise"), Check("Check"), Fold("Fold"), Call("Call"), AllIn("AllIn"), Bust("Bust");
 	
 	private String name;
 	

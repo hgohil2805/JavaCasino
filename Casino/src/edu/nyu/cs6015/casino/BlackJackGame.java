@@ -2,6 +2,7 @@ package edu.nyu.cs6015.casino;
 
 public class BlackJackGame extends Game
 {
+	Deck currentDeck;
 	public BlackJackGame()
 	{
 		super();
@@ -27,33 +28,39 @@ public class BlackJackGame extends Game
 		int currentPotRaise = 0;
 		one: while(raise)
 		{
-			Move currentMove = new Move(PlayerMove.Check,0);
+			Move currentMove = null;
 			two :for(Player p : this.currentRoundPlayers)
 			{
-				if(p.currentMoneyBet == currentPotRaise )
+				System.out.println("Current Pot Raise" +currentPotRaise);
+				if(p.currentPlayerStatus != PlayerMove.Fold && p.currentMoneyBet == currentPotRaise )
 				{
 					raise = false;
 					currentMove = p.makeMove();
 				}
-				else if(currentPotRaise > p.currentMoneyBet)
+				else if(p.currentPlayerStatus != PlayerMove.Fold && currentPotRaise > p.currentMoneyBet)
 				{
 					currentMove = p.forceRaise(currentPotRaise - p.currentMoneyBet); 
 				}
 				
-				if(currentMove.getMove().equals(PlayerMove.Check))
+				if(currentMove != null && currentMove.getMove().equals(PlayerMove.Check))
 				{
 					continue two;
 				}
-				else if(currentMove.getMove().equals(PlayerMove.Fold))
+				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Fold))
 				{
-					this.currentRoundPlayers.remove(p);
+					p.setCurrentStatus(PlayerMove.Fold);
 					p.setMoneyLost(p.currentMoneyBet);
 				}
-				else if(currentMove.getMove().equals(PlayerMove.Call))
+				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Call))
 				{
 					continue two;
 				}
-				else if(currentMove.getMove().equals(PlayerMove.Raise))
+				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Bust))
+				{
+					p.setCurrentStatus(PlayerMove.Fold);
+					p.setMoneyLost(p.currentMoneyBet);
+				}
+				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Raise))
 				{
 					int moveMoney = currentPotRaise - currentMove.getBet();
 					raise = true;
@@ -70,10 +77,8 @@ public class BlackJackGame extends Game
 			}
 			
 			System.out.println("The winner is " + this.getWinner().getName());
+			break one;
 		}
-		
-		
-		
 		}
 
 	@Override
@@ -116,6 +121,8 @@ public class BlackJackGame extends Game
 		int winnerValue = HandValue.getHandValue(Winner.currentCards,null, this);
 		for(Player currentPlayer:this.currentRoundPlayers)
 		{
+			if(currentPlayer.getCurrentStatus().equals(PlayerMove.Fold))
+				continue;
 			int currentPlayerValue = HandValue.getHandValue(currentPlayer.getCards(),null, this);
 			if(winnerValue < currentPlayerValue)
 			{
@@ -125,5 +132,6 @@ public class BlackJackGame extends Game
 		}
 		return Winner;
 	}
+	
 
 }

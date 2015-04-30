@@ -30,6 +30,7 @@ public abstract class Game
 	public void addPlayer(Player p)
 	{
 		this.currentPlayers.add(p);
+		this.currentRoundPlayers.add(p);
 	}
 	
 	public void removePlayer(Player p)
@@ -37,6 +38,7 @@ public abstract class Game
 		if(p != null && this.currentPlayers.contains(p))
 		{
 			this.currentPlayers.remove(p);
+			this.currentRoundPlayers.remove(p);
 		}
 	}
 	
@@ -64,5 +66,10 @@ public abstract class Game
 	{
 		Deck d = new Deck();
 		this.decksUsed.add(d);
+	}
+	
+	public Deck getCurrentDeck()
+	{
+		return this.decksUsed.get(0);
 	}
 }

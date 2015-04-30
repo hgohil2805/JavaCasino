@@ -12,14 +12,16 @@ public class Player
 	int moneyWon;
 	int currentMoneyBet;
 	int currentHandValue;
+	PlayerMove currentPlayerStatus;
 	ArrayList<Card> currentCards = new ArrayList<Card>();
 	Game currentGame;
 	static Scanner in = new Scanner(System.in);
-	public Player(String name,int age,int money)
+	public Player(String name,int age,int money, Game g)
 	{
 		this.name = name;
 		this.age = age;
 		this.totalMoney = money;
+		this.currentGame = g;
 	}
 	
 	public Player()
@@ -76,7 +78,9 @@ public class Player
 	
 	public void addCard(Card c)
 	{
+		System.out.println("Adding card "+c);
 		this.currentCards.add(c);
+		this.currentHandValue = HandValue.getHandValue(this.currentCards, null, this.currentGame);
 	}
 	
 	public ArrayList<Card> getCards()
@@ -89,9 +93,18 @@ public class Player
 		System.out.println("The current value of the card is:"+this.currentHandValue);
 		System.out.println("#################################");
 		System.out.println("The available options for you are: ");
-		System.out.println("\n 1 to check \n 2 to raise \n 3 to fold ");
+		System.out.println("\n 1 to check/stay \n 2 to raise \n 3 to fold ");
+		if(this.currentGame.getClass().equals(BlackJackGame.class))
+		{
+			System.out.println("\n 4 to hit ");
+		}
 		int input;
 		input = in.nextInt();
+		if(this.currentGame.getClass().equals(BlackJackGame.class) && input <= 0 ||input >4 )
+		{
+			System.out.println("Please enter a valid number");
+			this.makeMove();
+		}
 		Move currentMove = new Move (PlayerMove.Check,0);
 		switch(input)
 		{
@@ -100,6 +113,7 @@ public class Player
 			System.out.println("You have selected to check");
 			currentMove.setMove(PlayerMove.Check);
 			currentMove.setBet(0);
+			this.currentPlayerStatus = PlayerMove.Check;
 			break;
 		}
 		case 2: 
@@ -107,6 +121,7 @@ public class Player
 			System.out.println("You have selected to raise");
 			if(this.totalMoney > this.currentMoneyBet + 20)
 			{
+				this.currentPlayerStatus = PlayerMove.Raise;
 				currentMove = this.raiseMove(0);
 			}
 			else
@@ -122,8 +137,29 @@ public class Player
 			System.out.println("You have selected to fold like a bitch");
 			currentMove.setMove(PlayerMove.Fold);
 			currentMove.setBet(0);
+			this.currentPlayerStatus = PlayerMove.Fold;
 			this.Fold();
 			break;
+		}
+		
+		case 4:
+		{
+			System.out.println("You have decided to hit, You will be given one more card");
+			Card c = this.currentGame.getCurrentDeck().getTop();
+			this.currentCards.add(c);
+			System.out.println("Adding card "+c);
+			currentHandValue  = HandValue.getHandValue(this.currentCards,null, this.currentGame);
+			if(currentHandValue > 21)
+			{
+				System.out.println("You are bust!");
+				currentMove.setMove(PlayerMove.Bust);
+				currentMove.setBet(0);
+				return currentMove;
+			}
+			else
+			{
+				this.makeMove();
+			}
 		}
 		default:
 		{
@@ -137,6 +173,7 @@ public class Player
 	public void checkMove()
 	{
 		Move checkMove = new Move(PlayerMove.Check,0);
+		this.currentPlayerStatus = PlayerMove.Check;
 		System.out.println("checked" + checkMove);
 	}
 	
@@ -146,8 +183,9 @@ public class Player
 		one:while(true)
 		{
 		System.out.println("\n Press \n 1 to raise 20 \n 2 to raise 40 \n 3 to raise 100 \n 4 to enter your own number \n 5 to cancel raise");
-		int choice  ;
+		int choice ;
 		choice = in.nextInt();
+		this.currentPlayerStatus = PlayerMove.Raise;
 		switch(choice)
 		{
 		case 1: 
@@ -205,7 +243,6 @@ public class Player
 			if(this.totalMoney > this.currentMoneyBet+ n + toRaise)
 			{
 				this.currentMoneyBet += n;
-				//Move playerMove  = new Move("raise",n+toRaise);
 				raiseMove.setBet(n+toRaise);
 				break one;
 			}
@@ -226,10 +263,13 @@ public class Player
 	}
 	
 	
-	public void Fold()
+	public Move Fold()
 	{
 		System.out.println("You have selected to fold");
 		this.totalMoney = this.totalMoney - this.currentMoneyBet;
+		this.currentPlayerStatus = PlayerMove.Fold;
+		Move playerMove = new Move(PlayerMove.Fold,0);
+		return playerMove;
 	}
 	
 	public void playerLosesMoney(int n)
@@ -265,7 +305,8 @@ public class Player
 	
 	public Move forceRaise(int n)
 	{
-		one: while(true)
+		Boolean call  = true;
+		one: while(call)
 		{
 		System.out.format("The other players have raised %d, \n press 1 to raise equal  \n 2 to fold \n 3 to raise more \n 4 to go all in",n);
 		int userInput = in.nextInt();
@@ -274,14 +315,20 @@ public class Player
 		{
 			System.out.format("Raising by %d",n);
 			playerMove = new Move(PlayerMove.Call,n);
+			this.currentPlayerStatus = PlayerMove.Fold;
 			this.currentMoneyBet += n;
 			this.totalMoney -= n;
+			call = false;
+			return playerMove;
 		}
 		else if(userInput == 2)
 		{
 			playerMove.setBet(0);
 			playerMove.setMove(PlayerMove.Fold);
-			this.Fold();
+			this.currentPlayerStatus = PlayerMove.Fold;
+			call = false;
+			return this.Fold();
+			
 		}
 		else if(userInput == 3 && n < this.totalMoney )
 		{
@@ -291,6 +338,7 @@ public class Player
 		{
 			this.currentMoneyBet += n;
 			this.totalMoney -= n;
+			call  = false;
 			return this.goAllIn();
 		}
 		else
@@ -299,11 +347,13 @@ public class Player
 			continue one;
 		}
 		}
+		return null;
 	}
 	
 	public Move goAllIn()
 	{
 		Move playerMove = new Move(PlayerMove.AllIn,this.totalMoney - this.currentMoneyBet);
+		this.currentPlayerStatus = PlayerMove.AllIn;
 		return playerMove;
 	}
 	
@@ -329,5 +379,15 @@ public class Player
 	{
 		this.totalMoney -= n;
 		this.moneyLost += n;
+	}
+	
+	public void setCurrentStatus(PlayerMove move)
+	{
+		this.currentPlayerStatus = move;
+	}
+	
+	public PlayerMove getCurrentStatus()
+	{
+		return this.currentPlayerStatus;
 	}
 }
