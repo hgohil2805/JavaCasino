@@ -68,12 +68,19 @@ public class HandValue
 		
 		else if(g.getClass().equals(PokerGame.class))
 		{
-			return PokerHands.OnePair;
+			if(tableCards != null)
+			{
+				playerCard.addAll(tableCards);
+			}
+			PokerHands flushVar = isFlush(playerCard);
+			PokerHands StraightVar = isStraight(playerCard);
+			PokerHands otherHands = getCount(playerCard);
+			int highCard = getHighCard(playerCard);
 		}
 		return -1;
 	}
 	
-	private PokerHands isFlush(ArrayList<Card> cards)
+	public static PokerHands isFlush(ArrayList<Card> cards)
 	{
 		HashMap<Suit, ArrayList<Card>> suitCount = new HashMap<Suit,ArrayList<Card>>();
 		
@@ -97,8 +104,8 @@ public class HandValue
 			ArrayList<Card> temp = suitCount.get(s);
 			if(temp.size()> 4)
 			{
-				PokerHands series = this.isStraight(temp);
-				if(series != null && this.isRoyalStraight(cards))
+				PokerHands series = isStraight(temp);
+				if(series != null && isRoyalStraight(cards))
 				{
 					return PokerHands.RoyalFlush;
 				}
@@ -113,7 +120,7 @@ public class HandValue
 		return null;
 	}
 	
-	private PokerHands isStraight(ArrayList<Card> c)
+	public static PokerHands isStraight(ArrayList<Card> c)
 	{
 		ArrayList<Integer> elements = new ArrayList<Integer>();
 		int count = 1;
@@ -154,7 +161,7 @@ public class HandValue
 		}
 	}
 	
-	private boolean isRoyalStraight(ArrayList<Card> c)
+	private static boolean isRoyalStraight(ArrayList<Card> c)
 	{
 		ArrayList<Integer> elements = new ArrayList<Integer>();
 		for(Card currentCard : c)
@@ -181,7 +188,7 @@ public class HandValue
 		return true;
 	}
 	
-	private PokerHands getCount(ArrayList<Card> c)
+	public static PokerHands getCount(ArrayList<Card> c)
 	{
 		HashMap<Integer, Integer> cardCount = new HashMap<Integer,Integer>();
 		for(Card currentCard : c)
@@ -239,7 +246,7 @@ public class HandValue
 		return null;
 	}
 	
-	 public int getHighCard(ArrayList<Card> cardList)
+	 public static int getHighCard(ArrayList<Card> cardList)
 	 {
 		 int max = 0;
 		 for(Card c : cardList)

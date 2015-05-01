@@ -37,6 +37,7 @@ public class PokerGame extends Game
 		flop.add(currentDeck.getTop());
 		this.PlayersMakeMoves();
 		flop.add(currentDeck.getTop());
+		this.PlayersMakeMoves();
 	}
 
 	@Override
@@ -117,6 +118,11 @@ public class PokerGame extends Game
 			currentPotRaise = 0;
 			break one;
 		}
+	}
+	
+	public ArrayList<Player> getWinners()
+	{
+		return null;
 	}
 	
 
