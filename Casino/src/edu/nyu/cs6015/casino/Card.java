@@ -87,4 +87,6 @@ public class Card
 		return "name "+this.name+" value "+ this.value +" Suit "+this.cardSuit;
 	}
 	
+	
+	
 }
