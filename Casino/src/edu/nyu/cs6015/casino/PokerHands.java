@@ -22,4 +22,17 @@ public enum PokerHands
 	{
 		return this.name;
 	}
+	
+	public String getName(int value)
+	{
+		System.out.println(value);
+		for (PokerHands p : PokerHands.values())
+		{
+			if(p.value == value);
+				{
+					System.out.println("p value" +p.value);
+				}
+		}
+		return null;
+	}
 }

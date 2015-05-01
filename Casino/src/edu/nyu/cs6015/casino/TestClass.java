@@ -5,6 +5,8 @@ public class TestClass
 
 		public static void main(String args[])
 		{
+			
+			// Random test
 			/*Deck newDeck = new Deck();
 			newDeck.printDeck();
 			System.out.println("Testing case");
@@ -20,7 +22,21 @@ public class TestClass
 			p.setTotalMoney(1000);
 			p.makeMove();
 			*/
-			Game g = new BlackJackGame();
+			
+			//BlackJack Test 
+			/*Game g = new BlackJackGame();
+			Player one = new Player("ice",23,1000,g);
+			Player two = new Player("iceman",23,5000,g);
+			Player three = new Player("abc",21,100,g);
+			g.addPlayer(one);
+			g.addPlayer(two);
+			g.addPlayer(three);
+			g.startGame();*/
+			
+			
+			//Poker test
+			
+			Game g = new PokerGame();
 			Player one = new Player("ice",23,1000,g);
 			Player two = new Player("iceman",23,5000,g);
 			Player three = new Player("abc",21,100,g);

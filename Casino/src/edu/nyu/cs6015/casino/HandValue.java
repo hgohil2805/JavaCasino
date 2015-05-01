@@ -73,9 +73,31 @@ public class HandValue
 				playerCard.addAll(tableCards);
 			}
 			PokerHands flushVar = isFlush(playerCard);
-			PokerHands StraightVar = isStraight(playerCard);
+			PokerHands straightVar = isStraight(playerCard);
 			PokerHands otherHands = getCount(playerCard);
 			int highCard = getHighCard(playerCard);
+			int max = 0;
+			
+			if(flushVar != null && flushVar.getValue() > max)
+			{
+				max = flushVar.getValue();
+			}
+			if(straightVar != null && straightVar.getValue() > max)
+			{
+				max = straightVar.getValue();
+			}
+			if(otherHands != null && otherHands.getValue() > max)
+			{
+				max = otherHands.getValue();
+			}
+			if(max == 0 )
+			{
+				return highCard;
+			}
+			else
+			{
+				return max;
+			}
 		}
 		return -1;
 	}

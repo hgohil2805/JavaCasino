@@ -92,6 +92,17 @@ public class Player
 	{
 		if(this.currentGame.getClass().equals(BlackJackGame.class))
 			System.out.println("The current value of the card is:"+(int)currentHandValue);
+		else if(this.currentGame.getClass().equals(PokerGame.class))
+		{
+			System.out.println("The current max hand you have is");
+			int currentHand = 0;
+			if(currentGame.getFlop() != null && currentGame.flop.size() >= 3)
+			
+				{
+				currentHand = (int)HandValue.getHandValue(this.currentCards, currentGame.getFlop(), currentGame);
+				}
+			System.out.println(PokerHands.Flush.getName(currentHand));
+		}
 		System.out.println("#################################");
 		System.out.println("The available options for you are: ");
 		System.out.println("\n 1 to check/stay \n 2 to raise \n 3 to fold ");

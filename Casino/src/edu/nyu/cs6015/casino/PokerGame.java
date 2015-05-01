@@ -29,15 +29,19 @@ public class PokerGame extends Game
 			}
 		}
 		this.PlayersMakeMoves();
+		System.out.println("Adding 3 cards to the flop");
 		for(int i=0;i<3;i++)
 		{
 			flop.add(currentDeck.getTop());
 		}
 		this.PlayersMakeMoves();
+		System.out.println("Adding a card to the flop");
 		flop.add(currentDeck.getTop());
 		this.PlayersMakeMoves();
+		System.out.println("Adding a card to the flop");
 		flop.add(currentDeck.getTop());
 		this.PlayersMakeMoves();
+		System.out.println("The current winner is" + this.getWinners());
 	}
 
 	@Override
@@ -120,9 +124,20 @@ public class PokerGame extends Game
 		}
 	}
 	
-	public ArrayList<Player> getWinners()
+	public Player getWinners()
 	{
-		return null;
+		Player currentWinner = this.currentPlayers.get(0);
+		int max = (int)HandValue.getHandValue(currentWinner.getCards(), this.flop, this);
+		for(Player p : currentPlayers)
+		{
+			int currentHandValue = (int)HandValue.getHandValue(p.getCards(), this.flop, this);
+			if( currentHandValue > max)
+			{
+				currentWinner = p;
+				max = currentHandValue;
+			}
+		}
+		return currentWinner;
 	}
 	
 
