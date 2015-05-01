@@ -11,7 +11,7 @@ public class Player
 	int moneyLost;
 	int moneyWon;
 	int currentMoneyBet;
-	int currentHandValue;
+	Object  currentHandValue;
 	PlayerMove currentPlayerStatus;
 	ArrayList<Card> currentCards = new ArrayList<Card>();
 	Game currentGame;
@@ -90,7 +90,8 @@ public class Player
 	
 	public Move makeMove()
 	{
-		System.out.println("The current value of the card is:"+this.currentHandValue);
+		if(this.currentGame.getClass().equals(BlackJackGame.class))
+			System.out.println("The current value of the card is:"+(int)currentHandValue);
 		System.out.println("#################################");
 		System.out.println("The available options for you are: ");
 		System.out.println("\n 1 to check/stay \n 2 to raise \n 3 to fold ");
@@ -148,8 +149,8 @@ public class Player
 			Card c = this.currentGame.getCurrentDeck().getTop();
 			this.currentCards.add(c);
 			System.out.println("Adding card "+c);
-			currentHandValue  = HandValue.getHandValue(this.currentCards,null, this.currentGame);
-			if(currentHandValue > 21)
+			currentHandValue  = (int)HandValue.getHandValue(this.currentCards,null, this.currentGame);
+			if((int)currentHandValue > 21)
 			{
 				System.out.println("You are bust!");
 				currentMove.setMove(PlayerMove.Bust);
@@ -294,7 +295,10 @@ public class Player
 	
 	public void calculateCurrentHandValue()
 	{
-		this.currentHandValue = HandValue.getHandValue(this.currentCards,null, this.currentGame);
+		if(this.currentGame.getClass().equals(BlackJackGame.class))
+			this.currentHandValue = (int)HandValue.getHandValue(this.currentCards,null, this.currentGame);
+		else
+			this.currentHandValue = (PokerHands)HandValue.getHandValue(this.currentCards, this.currentGame.getFlop(), this.currentGame);
 	}
 	
 	public void resetCard()

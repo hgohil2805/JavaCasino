@@ -77,11 +77,11 @@ public class BlackJackGame extends Game
 				
 			}
 			Player currentWinner = this.getWinner();
-			int currentWinnerValue = HandValue.getHandValue(currentWinner.getCards(),null, this);
+			int currentWinnerValue = (int)HandValue.getHandValue(currentWinner.getCards(),null, this);
 			
 			Dealer.addCard(currentDeck.getTop());
 			Dealer.addCard(currentDeck.getTop());
-			int dealerHand = HandValue.getHandValue(Dealer.getCards(),null, this);
+			int dealerHand = (int)HandValue.getHandValue(Dealer.getCards(),null, this);
 			if(currentWinnerValue > dealerHand)
 			{
 				System.out.println("The current winner is " + this.getWinner().getName());
@@ -131,12 +131,12 @@ public class BlackJackGame extends Game
 	public Player getWinner()
 	{
 		Player Winner =this.currentRoundPlayers.get(0);
-		int winnerValue = HandValue.getHandValue(Winner.currentCards,null, this);
+		int winnerValue = (int)HandValue.getHandValue(Winner.currentCards,null, this);
 		for(Player currentPlayer:this.currentRoundPlayers)
 		{
 			if(currentPlayer.getCurrentStatus().equals(PlayerMove.Fold))
 				continue;
-			int currentPlayerValue = HandValue.getHandValue(currentPlayer.getCards(),null, this);
+			int currentPlayerValue = (int)HandValue.getHandValue(currentPlayer.getCards(),null, this);
 			if(winnerValue < currentPlayerValue)
 			{
 				Winner.Lose(Winner.currentMoneyBet);

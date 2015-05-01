@@ -10,7 +10,7 @@ public abstract class Game
 	int tableSize;
 	ArrayList<Deck> decksUsed = new ArrayList<Deck>();
 	int currentPotMoney;
-	
+	ArrayList<Card> flop = new ArrayList<Card>();
 	
 	public Game()
 	{
@@ -72,4 +72,10 @@ public abstract class Game
 	{
 		return this.decksUsed.get(0);
 	}
+	
+	public ArrayList<Card> getFlop()
+	{
+		return this.flop;
+	}
+	
 }

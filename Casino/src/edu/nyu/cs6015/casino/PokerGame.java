@@ -6,7 +6,7 @@ public class PokerGame extends Game
 {
 	Deck currentDeck;
 	ArrayList<Card> flop = new ArrayList<Card>();
-	
+	int currentPotSize = 0;
 	public PokerGame()
 	{
 		super();
@@ -20,6 +20,19 @@ public class PokerGame extends Game
 		currentDeck = this.decksUsed.get(0);
 		currentDeck.sortDeck();
 		currentDeck.shuffleDeck();
+		for(int i=0 ; i < 2;i++)
+		{
+			for(Player p : this.currentRoundPlayers)
+			{
+				p.addCard(currentDeck.getTop());
+			}
+		}
+		
+		for(int i=0;i<3;i++)
+		{
+			flop.add(currentDeck.getTop());
+		}
+		
 	}
 
 	@Override
@@ -48,5 +61,6 @@ public class PokerGame extends Game
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }

@@ -13,7 +13,7 @@ public class HandValue
 		System.out.println("Hand object created");
 	}
 	
-	public static int getHandValue(ArrayList<Card> playerCard, ArrayList<Card> tableCards, Game g)
+	public static Object getHandValue(ArrayList<Card> playerCard, ArrayList<Card> tableCards, Game g)
 	{
 		int value = 0;
 		if(g.getClass().equals(BlackJackGame.class) && playerCard != null)
@@ -62,6 +62,11 @@ public class HandValue
 				}
 			}
 			return value;
+		}
+		
+		else if(g.getClass().equals(PokerGame.class))
+		{
+			return PokerHands.OnePair;
 		}
 		return -1;
 	}
