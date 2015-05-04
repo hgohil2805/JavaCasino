@@ -96,9 +96,10 @@ public abstract class Game
 		return temp;
 	}
 	
-	public ArrayList<Card> getCurrentFlopCard()
+
+	public void AddToFLop(Card c)
 	{
-		return this.flop;
+		this.flop.add(c);
 	}
 	
 }

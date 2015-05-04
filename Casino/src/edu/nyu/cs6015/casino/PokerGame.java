@@ -18,21 +18,6 @@ public class PokerGame extends Game
 	@Override
 	public void startGame() 
 	{
-		this.getFirstRound();
-		this.PlayersMakeMoves();
-		System.out.println("Adding 3 cards to the flop");
-		for(int i=0;i<3;i++)
-		{
-			flop.add(currentDeck.getTop());
-		}
-		this.PlayersMakeMoves();
-		System.out.println("Adding a card to the flop");
-		flop.add(currentDeck.getTop());
-		this.PlayersMakeMoves();
-		System.out.println("Adding a card to the flop");
-		flop.add(currentDeck.getTop());
-		this.PlayersMakeMoves();
-		System.out.println("The current winner is" + this.getWinners());
 	}
 
 	@Override
@@ -62,58 +47,7 @@ public class PokerGame extends Game
 		
 	}
 	
-	public void PlayersMakeMoves()
-	{
-		boolean raise = true;
-		one: while(raise)
-		{
-			Move currentMove = null;
-			two : for(Player p : this.currentRoundPlayers)
-			{
-				System.out.println("Current Pot Raise" +currentPotRaise);
-				if(p.currentPlayerStatus != PlayerMove.Fold && p.currentMoneyBet == currentPotRaise )
-				{
-					raise = false;
-					currentMove = p.makeMove();
-				}
-				else if(p.currentPlayerStatus != PlayerMove.Fold && currentPotRaise > p.currentMoneyBet)
-				{
-					currentMove = p.forceRaise(currentPotRaise - p.currentMoneyBet); 
-				}
-				
-				if(currentMove != null && currentMove.getMove().equals(PlayerMove.Check))
-				{
-					continue two;
-				}
-				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Fold))
-				{
-					p.setCurrentStatus(PlayerMove.Fold);
-					p.setMoneyLost(p.currentMoneyBet);
-				}
-				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Call))
-				{
-					continue two;
-				}
-				
-				else if(currentMove != null && currentMove.getMove().equals(PlayerMove.Raise))
-				{
-					int moveMoney = currentPotRaise - currentMove.getBet();
-					raise = true;
-					if(moveMoney > 0)
-					{
-						currentPotRaise += moveMoney;
-					}
-					else
-					{
-						currentPotRaise += currentMove.getBet();
-					}
-				}
-				
-			}
-			currentPotRaise = 0;
-			break one;
-		}
-	}
+	
 	
 	public Player getWinners()
 	{
@@ -172,7 +106,7 @@ public class PokerGame extends Game
 				{
 					for(Player p : currentRoundPlayers)
 				{
-					if(p.currentMoneyBet == currentPotRaise)
+					if(p.currentRoundBet == currentPotRaise)
 					{
 						raise = false;
 					}
@@ -216,10 +150,12 @@ public class PokerGame extends Game
 	
 	public void addCurrentPotRaise(int n)
 	{
-		this.currentPotRaise += n;
+		System.out.println("Adding to current pot"+n);
+		this.currentPotRaise += n; 
 	}
 	public int getCurrentPotRaise()
 	{
+		System.out.println("Clearing current Pot raise");
 		return this.currentPotRaise;
 	}
 	
@@ -227,11 +163,23 @@ public class PokerGame extends Game
 	{
 		for(int i=0;i<n;i++)
 		{
-			this.flop.add(currentDeck.getTop());
+			this.AddToFLop(currentDeck.getTop());
+			System.out.println("flop size from poker" +flop.size());
 		}
 	}
 	
-	
+	public Player getFirstPlayer()
+	{
+		for(Player p: currentRoundPlayers)
+		{
+			if(p.currentPlayerStatus != PlayerMove.Fold)
+			{
+				return p;
+			}
+			else continue;
+		}
+		return null;
+	}
 	
 
 }

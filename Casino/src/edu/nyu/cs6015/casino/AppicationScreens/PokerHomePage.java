@@ -44,6 +44,7 @@ public class PokerHomePage extends JFrame
 	JButton raiseButton ;
 	JButton foldButton;
 	JButton checkButton;
+	int count = 0;
 	public PokerHomePage(final PokerGame g)
 	{
 		currentGameInstance = g;
@@ -99,14 +100,9 @@ public class PokerHomePage extends JFrame
 		currentGameInstance = (PokerGame) g;
 		ArrayList<Player> playerCards = currentGameInstance.getFirstRound();
 		this.currentPlayer = playerCards.get(0);
-		this.text.append(" "+playerCards.get(0).getName());
-		text.append("\n Your current list of cards are");
-		for(Card c : currentPlayer.getCards())
-		{
-			text.append("\n "+c );
-		}
 		this.text.disable();
 		this.text.repaint();
+		firstScreen();
 	}
 	
 	
@@ -124,7 +120,6 @@ public class PokerHomePage extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				callMove();
-				getNextScreen(currentPlayer,PlayerMove.Call);
 			}
 	    	
 	    });
@@ -136,7 +131,6 @@ public class PokerHomePage extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				raiseMove();
-				getNextScreen(currentPlayer,PlayerMove.Raise);
 			}
 	    	
 	    });
@@ -158,7 +152,6 @@ public class PokerHomePage extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				foldMove();
-				getNextScreen(currentPlayer,PlayerMove.Fold);
 			}
 	    	
 	    });
@@ -169,7 +162,6 @@ public class PokerHomePage extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				checkMove();
-				getNextScreen(currentPlayer,PlayerMove.Check);
 				
 			}
 	    });
@@ -195,45 +187,73 @@ public class PokerHomePage extends JFrame
 	    gc.gridx = 0;
 	    gc.gridy = 2;
 	    add(buttonPanel,gc);
-	    
-	    
 	}
 	
 	
 	public void getNextScreen(Player currentPlayerChance,PlayerMove move)
 	{
-		int count = 0;
+		boolean winnerFound = false;
 		Player p = currentGameInstance.getNextPlayer(currentPlayerChance,move);
+		currentPlayer = p;
 		if(p == null && count == 0)
 		{
+			p = currentGameInstance.getFirstPlayer();
 			currentGameInstance.addNToFlop(3);
+			count ++;
 		}
+		else if(p == null && count == 1)
+		{
+			p = currentGameInstance.getFirstPlayer();
+			currentGameInstance.addNToFlop(1);
+			count ++;
+		}
+		else if(p == null && count == 2)
+		{
+			p = currentGameInstance.getFirstPlayer();
+			currentGameInstance.addNToFlop(1);
+			count++;
+		}
+		else if(p == null && count == 3)
+		{
+			Player winner = currentGameInstance.getWinners();
+			winnerFound = true;
+			text.setText("");
+			text.setText("Winner is: \n" + winner.getName());
+		}
+		if(p != null && !winnerFound)
+		{		
 		currentPlayer = p;
-		text.append("\n Your current List of Cards");
+		text.setText("");
+		text.append("\n "+p.getName());
+		text.append("\nYour current list of cards are ");
 		for(Card c : p.getCards())
 		{
-			text.append("\n" +c);
+			text.append(c +"\t");
 		}
-		if(currentGameInstance.getFlop() != null)
+		if(currentGameInstance.getFlop().size() > 1)
 		{
 			text.append("Cards on the flop");
-			for(Card c : currentGameInstance.getFlop())
+		for(Card c : currentGameInstance.getFlop())
 		{
 			text.append("\n" +c);
 		}
 		}
-		text.append("\n Your chance to make a move now,  "+p.getName());
-		text.append(""+raiseAmount.getValue());
-		if(currentPlayer.getCurrentBet() < currentGameInstance.getCurrentPotRaise())
+		
+		text.append("\n your current total bet is: " + currentPlayer.getCurrentBet());
+		text.append("\n The current total raise is: " +currentGameInstance.getPotMoney());
+		text.append("\n The total current round raise is : "+currentGameInstance.getCurrentPotRaise());
+		if(currentPlayer.getCurrentRoundBet() < currentGameInstance.getCurrentPotRaise())
 		{
 			callButton.setVisible(true);
-			int amount = currentPlayer.getCurrentBet() - currentGameInstance.getCurrentPotRaise();
-			callButton.setText("Call - "+amount);
+			int amount = currentGameInstance.getCurrentPotRaise() - currentPlayer.getCurrentRoundBet() ;
+			callButton.setText("Call ("+amount +")");
 		}
 		else if(currentPlayer.getCurrentBet() == currentGameInstance.getCurrentPotRaise())
 		{
 			callButton.setText("All IN");
 		}
+		}
+		
 	}
 	
 	
@@ -242,15 +262,17 @@ public class PokerHomePage extends JFrame
 		currentPlayer.addCurrentRoundBet(raiseAmount.getValue());
 		currentPlayer.addCurrentGameBet(raiseAmount.getValue());
 		currentGameInstance.addCurrentPotRaise(raiseAmount.getValue());
+		currentGameInstance.addPotMoney(raiseAmount.getValue());
 		getNextScreen(currentPlayer,PlayerMove.Raise);
 	}
 	
 	public void callMove()
 	{
-		int amount = currentPlayer.getCurrentBet() - currentGameInstance.getCurrentPotRaise();
+		int amount = currentGameInstance.getCurrentPotRaise() - currentPlayer.getCurrentRoundBet();
+		currentPlayer.clearCurrentRoundBet();
 		currentPlayer.addCurrentGameBet(amount);
+		//currentGameInstance.addCurrentPotRaise(amount);
 		currentGameInstance.addPotMoney(amount);
-		currentGameInstance.addCurrentPotRaise(amount);
 		getNextScreen(currentPlayer,PlayerMove.Call);
 	}
 	
@@ -264,5 +286,18 @@ public class PokerHomePage extends JFrame
 		currentPlayer.Fold();
 		getNextScreen(currentPlayer,PlayerMove.Fold);
 		currentGameInstance.removePlayer(currentPlayer);
+	}
+	
+	public void firstScreen()
+	{
+		text.setText("");
+		text.append("\n Hello " +currentPlayer.getName());
+		text.append("\n Your current list of cards are \n ");
+		for(Card c :currentPlayer.getCards())
+		{
+			text.append(c + "\t");
+		}
+		text.append("\n");
+		callButton.setText("AllIn");
 	}
 }

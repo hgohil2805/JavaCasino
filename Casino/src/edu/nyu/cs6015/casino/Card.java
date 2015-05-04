@@ -84,7 +84,7 @@ public class Card
 	
 	public String toString()
 	{
-		return "name "+this.name+" value "+ this.value +" Suit "+this.cardSuit;
+		return name + " Of " + cardSuit;
 	}
 	
 	

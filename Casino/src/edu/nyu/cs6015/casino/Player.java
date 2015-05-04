@@ -10,7 +10,7 @@ public class Player
 	int totalMoney;
 	int moneyLost;
 	int moneyWon;
-	int currentMoneyBet;
+	int currentRoundBet;
 	int currentGameBet;
 	Object  currentHandValue;
 	PlayerMove currentPlayerStatus;
@@ -132,7 +132,7 @@ public class Player
 		case 2: 
 		{
 			System.out.println("You have selected to raise");
-			if(this.totalMoney > this.currentMoneyBet + 20)
+			if(this.totalMoney > this.currentRoundBet + 20)
 			{
 				this.currentPlayerStatus = PlayerMove.Raise;
 				currentMove = this.raiseMove(0);
@@ -204,31 +204,31 @@ public class Player
 		case 1: 
 		{
 			System.out.println("Raising by 20");
-			if(this.totalMoney > this.currentMoneyBet+ 20 +toRaise)
+			if(this.totalMoney > this.currentRoundBet+ 20 +toRaise)
 			{
-				this.currentMoneyBet += 20;
+				this.currentRoundBet += 20;
 				raiseMove.setBet(20+toRaise);
 				break one;
 			}
 			else 
 			{
-				System.out.format("Cannot raise by %d , you only have %d" ,20+toRaise, this.totalMoney - this.currentMoneyBet); 
+				System.out.format("Cannot raise by %d , you only have %d" ,20+toRaise, this.totalMoney - this.currentRoundBet); 
 				continue;
 			}
 		}
 		case 2: 
 		{
 			System.out.println("Raising by 40");
-			if(this.totalMoney > this.currentMoneyBet+ 40 + toRaise)
+			if(this.totalMoney > this.currentRoundBet+ 40 + toRaise)
 			{
-				this.currentMoneyBet += 40;
+				this.currentRoundBet += 40;
 				//Move playerMove  = new Move("raise",40 + toRaise);
 				raiseMove.setBet(40+toRaise);
 				break one;
 			}
 			else
 			{
-				System.out.format("Cannot raise by %d , you only have %d" ,40 + toRaise, this.totalMoney - this.currentMoneyBet); 
+				System.out.format("Cannot raise by %d , you only have %d" ,40 + toRaise, this.totalMoney - this.currentRoundBet); 
 				continue;
 			}
 			
@@ -236,16 +236,16 @@ public class Player
 		case 3: 
 		{
 			System.out.println("Raising by 100");
-			if(this.totalMoney > this.currentMoneyBet+ 100 + toRaise)
+			if(this.totalMoney > this.currentRoundBet+ 100 + toRaise)
 			{
-				this.currentMoneyBet += 100;
+				this.currentRoundBet += 100;
 				//Move playerMove  = new Move("raise",100);
 				raiseMove.setBet(100+toRaise);
 				break one;
 			}
 			else
 			{
-				System.out.format("Cannot raise by %d , you only have %d" ,100 + toRaise, this.totalMoney - this.currentMoneyBet); 
+				System.out.format("Cannot raise by %d , you only have %d" ,100 + toRaise, this.totalMoney - this.currentRoundBet); 
 				continue;
 			}
 		}
@@ -253,15 +253,15 @@ public class Player
 		{
 			System.out.println("Enter the number you want to raise by");
 			int n = in.nextInt();
-			if(this.totalMoney > this.currentMoneyBet+ n + toRaise)
+			if(this.totalMoney > this.currentRoundBet+ n + toRaise)
 			{
-				this.currentMoneyBet += n;
+				this.currentRoundBet += n;
 				raiseMove.setBet(n+toRaise);
 				break one;
 			}
 			else
 			{
-				System.out.format("Cannot raise by %d , you only have %d" ,n +toRaise, this.totalMoney - this.currentMoneyBet); 
+				System.out.format("Cannot raise by %d , you only have %d" ,n +toRaise, this.totalMoney - this.currentRoundBet); 
 				continue;
 			}	
 		}
@@ -280,9 +280,9 @@ public class Player
 	{
 		System.out.println("You have selected to fold");
 		this.totalMoney = this.totalMoney - this.currentGameBet;
+		reset();
 		removeCurrentGameBet();
 		this.currentPlayerStatus = PlayerMove.Fold;
-		Move playerMove = new Move(PlayerMove.Fold,0);
 		
 	}
 	
@@ -293,7 +293,7 @@ public class Player
 	
 	public void playerLosesHand()
 	{
-		this.totalMoney -= this.currentMoneyBet;
+		this.totalMoney -= this.currentRoundBet;
 	}
 	
 	public void setCurrentGame(Game g)
@@ -319,71 +319,23 @@ public class Player
 		this.currentCards = new ArrayList<Card>();
 	}
 	
-	
-	public Move forceRaise(int n)
-	{
-		Boolean call  = true;
-		one: while(call)
-		{
-		System.out.format("The other players have raised %d, \n press 1 to raise equal  \n 2 to fold \n 3 to raise more \n 4 to go all in",n);
-		int userInput = in.nextInt();
-		Move playerMove = new Move(PlayerMove.Check,0);
-		if(userInput == 1 && n<this.totalMoney)
-		{
-			System.out.format("Raising by %d",n);
-			playerMove = new Move(PlayerMove.Call,n);
-			this.currentPlayerStatus = PlayerMove.Fold;
-			this.currentMoneyBet += n;
-			this.totalMoney -= n;
-			call = false;
-			return playerMove;
-		}
-		else if(userInput == 2)
-		{
-			playerMove.setBet(0);
-			playerMove.setMove(PlayerMove.Fold);
-			this.currentPlayerStatus = PlayerMove.Fold;
-			call = false;
-			return null;
-			
-		}
-		else if(userInput == 3 && n < this.totalMoney )
-		{
-			return this.raiseMove(n);
-		}
-		else if(userInput == 4 && n < this.totalMoney)
-		{
-			this.currentMoneyBet += n;
-			this.totalMoney -= n;
-			call  = false;
-			return this.goAllIn();
-		}
-		else
-		{
-			System.out.println("You do not have enough money to match the bid");
-			continue one;
-		}
-		}
-		return null;
-	}
-	
 	public Move goAllIn()
 	{
-		Move playerMove = new Move(PlayerMove.AllIn,this.totalMoney - this.currentMoneyBet);
+		Move playerMove = new Move(PlayerMove.AllIn,this.totalMoney - this.currentRoundBet);
 		this.currentPlayerStatus = PlayerMove.AllIn;
 		return playerMove;
 	}
 	
 	public int getCurrentBet()
 	{
-		return this.currentMoneyBet;
+		return this.currentRoundBet;
 	}
 	
 	public void reset()
 	{
 		this.currentCards.clear();
 		this.currentHandValue = 0;
-		this.currentMoneyBet = 0;
+		this.currentRoundBet = 0;
 	}
 	
 	public void Wins(int n)
@@ -410,14 +362,19 @@ public class Player
 	
 	public void addCurrentRoundBet(int n)
 	{
-		this.currentMoneyBet  += n;
+		this.currentRoundBet  += n;
 	}
 	
 	public void clearCurrentRoundBet()
 	{
-		this.currentMoneyBet = 0;
+		this.currentRoundBet = 0;
 	}
 	
+	
+	public int getCurrentRoundBet()
+	{
+		return this.currentRoundBet;
+	}
 	public void addCurrentGameBet(int n)
 	{
 		this.currentGameBet += n;
