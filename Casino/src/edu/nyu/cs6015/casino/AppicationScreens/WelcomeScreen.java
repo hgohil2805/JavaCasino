@@ -14,6 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import edu.nyu.cs6015.casino.BlackJackGame;
+import edu.nyu.cs6015.casino.Game;
+import edu.nyu.cs6015.casino.PokerGame;
+
 
 
 public class WelcomeScreen extends JFrame {
@@ -33,6 +37,7 @@ public class WelcomeScreen extends JFrame {
 		add(createHeading());
 		add(createAlgorithmsList());
 		setVisible(true);
+		
 	}
 
 	public JPanel createAlgorithmsList() {
@@ -50,15 +55,15 @@ public class WelcomeScreen extends JFrame {
 		b.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Algorithm a = null;
+				Game  g = null;
 				switch ((String) list.getSelectedItem()) {
 				case "Poker":
-					//a = new MD5Algorithm();
+					g = new PokerGame();
 					System.out.println("Starting new Poker game");
 					break;
 					
 				case "BlackJack":
-					//a = new RC4Algorithm();
+					g = new BlackJackGame();
 					System.out.println("Starting new BlackJack");
 					break;
 				case "Roulette":
@@ -66,7 +71,7 @@ public class WelcomeScreen extends JFrame {
 					System.out.println("Starting new Roulette");
 					break;
 				}
-				//new AlgorithmHomePage(a);
+				new GameHomePage(g);
 			}
 		});
 		return b;

@@ -78,4 +78,9 @@ public abstract class Game
 		return this.flop;
 	}
 	
+	public String getName()
+	{
+		return this.gameName;
+	}
+	
 }

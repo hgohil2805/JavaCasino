@@ -105,20 +105,14 @@ public abstract class Algorithm {
 		button.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Algorithm.this.getClass() == MD5Algorithm.class){
-					new MD5ExecutionPage(Algorithm.this);
-				} else if (Algorithm.this.getClass() == RC4Algorithm.class){
-					new RC4ExecutionPage(Algorithm.this);
-				} else {
-					new PGPExecutionPage(Algorithm.this);
-				}
+				
 			}
 		});
 		pane.add(button, c);
 		return pane;
 	}
 	
-	public abstract void executeAlgorithm(AlgorithmDataHolder input) throws Exception;
+	//public abstract void executeAlgorithm(AlgorithmDataHolder input) throws Exception;
 	
 	public String getAlgoName(){
 		return algoName;
