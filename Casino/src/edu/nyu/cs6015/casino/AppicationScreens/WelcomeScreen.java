@@ -60,6 +60,7 @@ public class WelcomeScreen extends JFrame {
 				case "Poker":
 					g = new PokerGame();
 					System.out.println("Starting new Poker game");
+					new PokerHomePage((PokerGame)g);
 					break;
 					
 				case "BlackJack":
@@ -71,7 +72,6 @@ public class WelcomeScreen extends JFrame {
 					System.out.println("Starting new Roulette");
 					break;
 				}
-				new GameHomePage(g);
 			}
 		});
 		return b;

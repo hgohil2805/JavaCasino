@@ -83,4 +83,22 @@ public abstract class Game
 		return this.gameName;
 	}
 	
+	public ArrayList<Player> getPlayers()
+	{
+		ArrayList<Player> temp = new ArrayList<Player>();
+		for(Player p : this.currentPlayers)
+		{
+			if(p.currentPlayerStatus != PlayerMove.Fold)
+			{
+				temp.add(p);
+			}
+		}
+		return temp;
+	}
+	
+	public ArrayList<Card> getCurrentFlopCard()
+	{
+		return this.flop;
+	}
+	
 }

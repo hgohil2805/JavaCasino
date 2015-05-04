@@ -11,6 +11,7 @@ public class Player
 	int moneyLost;
 	int moneyWon;
 	int currentMoneyBet;
+	int currentGameBet;
 	Object  currentHandValue;
 	PlayerMove currentPlayerStatus;
 	ArrayList<Card> currentCards = new ArrayList<Card>();
@@ -275,13 +276,14 @@ public class Player
 	}
 	
 	
-	public Move Fold()
+	public void Fold()
 	{
 		System.out.println("You have selected to fold");
-		this.totalMoney = this.totalMoney - this.currentMoneyBet;
+		this.totalMoney = this.totalMoney - this.currentGameBet;
+		removeCurrentGameBet();
 		this.currentPlayerStatus = PlayerMove.Fold;
 		Move playerMove = new Move(PlayerMove.Fold,0);
-		return playerMove;
+		
 	}
 	
 	public void playerLosesMoney(int n)
@@ -342,7 +344,7 @@ public class Player
 			playerMove.setMove(PlayerMove.Fold);
 			this.currentPlayerStatus = PlayerMove.Fold;
 			call = false;
-			return this.Fold();
+			return null;
 			
 		}
 		else if(userInput == 3 && n < this.totalMoney )
@@ -405,4 +407,25 @@ public class Player
 	{
 		return this.currentPlayerStatus;
 	}
+	
+	public void addCurrentRoundBet(int n)
+	{
+		this.currentMoneyBet  += n;
+	}
+	
+	public void clearCurrentRoundBet()
+	{
+		this.currentMoneyBet = 0;
+	}
+	
+	public void addCurrentGameBet(int n)
+	{
+		this.currentGameBet += n;
+	}
+	
+	public void removeCurrentGameBet()
+	{
+		this.currentGameBet = 0;
+	}
+	
 }
