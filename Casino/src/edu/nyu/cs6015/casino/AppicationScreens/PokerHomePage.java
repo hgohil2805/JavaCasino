@@ -121,21 +121,19 @@ public class PokerHomePage extends JFrame
 		//buttons panel 
 	    buttonPanel = new JPanel();
 	    //Left panel one
-	    panelOne = new JPanel(new GridLayout(2,1)); 
-	    callButton = new JButton("Call");
+	    panelOne = new JPanel(new GridLayout()); 
+	    callButton = new JButton("<html><body><b><font size=5 face=\"Arial\">Call</b></body></html>");
 	    
 	    callButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(callButton.getText() == "AllIn")
 					{
-					System.out.println("Call callMove");
 					allInMove();
 					
 					}
 				else 
 				{
-					System.out.println("Call allInMove");
 					callMove();
 				}
 			}
@@ -143,8 +141,8 @@ public class PokerHomePage extends JFrame
 	    });
 	    
 	    
-	    callButton.setPreferredSize(new Dimension(150,125));
-	    raiseButton  = new JButton("Raise");
+	    //callButton.setPreferredSize(new Dimension(150,125));
+	    raiseButton  = new JButton("<html><body><b><font size=5 face=\"Arial\">Raise</b></body></html>");
 	    raiseButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -154,17 +152,9 @@ public class PokerHomePage extends JFrame
 	    });
 	    
 	    panelOne.add(callButton);
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
 	    
 	    panelOne.add(raiseButton);
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    foldButton = new JButton("Fold");
+	    foldButton = new JButton("<html><body><b><font size=5 face=\"Arial\">Fold</b></body></html>");
 	    foldButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -173,8 +163,8 @@ public class PokerHomePage extends JFrame
 			}
 	    	
 	    });
-	    foldButton.setPreferredSize(new Dimension(150,125));
-	    checkButton = new JButton("check");
+	    //foldButton.setPreferredSize(new Dimension(150,125));
+	    checkButton = new JButton("<html><body><b><font size=5 face=\"Arial\">Check</b></body></html>");
 	    checkButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -188,7 +178,7 @@ public class PokerHomePage extends JFrame
 	    //Right panel two
 	    
 	    
-	    JPanel panelTwo = new JPanel(new GridLayout(2,1));
+	    JPanel panelTwo = new JPanel(new GridLayout());
 	    panelTwo.add(foldButton);
 	    panelTwo.add(checkButton);
 	   
@@ -211,7 +201,12 @@ public class PokerHomePage extends JFrame
 	public void getNextScreen(Player currentPlayerChance,PlayerMove move)
 	{
 		boolean winnerFound = false;
+		Player winner;
 		Player p = currentGameInstance.getNextPlayer(currentPlayerChance,move);
+		if(currentGameInstance.getPlayers().size() == 1)
+		{
+			winner = p;
+		}
 		currentPlayer = p;
 		if(p == null && count == 0)
 		{
@@ -233,7 +228,7 @@ public class PokerHomePage extends JFrame
 		}
 		else if(p == null && count == 3)
 		{
-			Player winner = currentGameInstance.getWinners();
+			winner = currentGameInstance.getWinners();
 			winnerFound = true;
 			text.setText("");
 			text.setText("Winner is: \n" + winner.getName());
@@ -316,7 +311,7 @@ public class PokerHomePage extends JFrame
 			text.append(c + "\t");
 		}
 		text.append("\n");
-		callButton.setText("AllIn");
+		callButton.setText("<html><body><b><font size=5 face=\"Arial\">AllIn</b></body></html>");
 	}
 	
 	public void allInMove()

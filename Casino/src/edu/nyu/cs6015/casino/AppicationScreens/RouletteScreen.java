@@ -113,7 +113,7 @@ public class RouletteScreen extends JFrame
 		//buttons panel 
 	    buttonPanel = new JPanel();
 	    //Left panel one
-	    panelOne = new JPanel(new GridLayout(2,1)); 
+	    panelOne = new JPanel(new GridLayout()); 
 	    callButton = new JButton("Place bet on Number");
 	    
 	    callButton.addActionListener(new ActionListener(){
@@ -170,7 +170,7 @@ public class RouletteScreen extends JFrame
 	    //Right panel two
 	    
 	    
-	    JPanel panelTwo = new JPanel(new GridLayout(3,1));
+	    JPanel panelTwo = new JPanel(new GridLayout());
 	    panelTwo.add(foldButton);
 	    panelTwo.add(stayButton);
 	    panelTwo.add(hitButton);
