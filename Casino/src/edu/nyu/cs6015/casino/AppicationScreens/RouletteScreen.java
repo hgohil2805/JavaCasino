@@ -1,6 +1,8 @@
 package edu.nyu.cs6015.casino.AppicationScreens;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -42,6 +44,7 @@ public class RouletteScreen extends JFrame
 	JButton stayButton;
 	JButton hitButton;
 	JTextArea numberText;
+	Font font;
 	int count = 0;
 	public RouletteScreen(final Roulette g)
 	{
@@ -63,10 +66,13 @@ public class RouletteScreen extends JFrame
 	    setLayout(new GridBagLayout());
 	     gc = new GridBagConstraints();
 	   // gc.anchor = GridBagConstraints.LINE_END;
-	    
+
+		 font = new Font("Verdana", Font.BOLD, 12);
 	    //top text content field
 	    text  = new JTextArea();
 	    text.setText("Hello");
+	    text.setForeground(Color.BLUE);
+	    text.setFont(font);
 	    scroll = new JScrollPane(text);
 	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	    text.setMargin(new Insets(10, 10, 10, 10));
@@ -90,6 +96,8 @@ public class RouletteScreen extends JFrame
 	    //gc.weightx = 0.1;
 	    gc.weighty = 0.01;
 	    numberText = new JTextArea();
+	    numberText.setFont(font);
+	    numberText.setForeground(Color.BLUE);
 	    numberText.setText("Enter number here");
 	    add(numberText,gc);
 	    raiseAmount.setLabelTable(raiseAmount.createStandardLabels(10));

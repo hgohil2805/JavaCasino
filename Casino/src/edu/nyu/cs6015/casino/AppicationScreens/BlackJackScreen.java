@@ -1,6 +1,8 @@
 package edu.nyu.cs6015.casino.AppicationScreens;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -48,6 +50,7 @@ public class BlackJackScreen extends JFrame
 	JButton checkButton;
 	JButton stayButton;
 	JButton hitButton;
+	Font font;
 	int count = 0;
 	public BlackJackScreen(final BlackJackGame g)
 	{
@@ -63,9 +66,11 @@ public class BlackJackScreen extends JFrame
 	    setLayout(new GridBagLayout());
 	     gc = new GridBagConstraints();
 	   // gc.anchor = GridBagConstraints.LINE_END;
-	    
+	     font = new Font("Verdana", Font.BOLD, 12);
 	    //top text content field
 	    text  = new JTextArea();
+	    text.setForeground(Color.BLUE);
+	    text.setFont(font);
 	    text.setText("Hello");
 	    
 	    scroll = new JScrollPane(text);

@@ -1,6 +1,8 @@
 package edu.nyu.cs6015.casino.AppicationScreens;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -44,6 +46,7 @@ public class PokerHomePage extends JFrame
 	JButton raiseButton ;
 	JButton foldButton;
 	JButton checkButton;
+	Font font;
 	int count = 0;
 	public PokerHomePage(final PokerGame g)
 	{
@@ -58,12 +61,17 @@ public class PokerHomePage extends JFrame
 	    JButton button = new JButton("<html><body><b><font size=5 face=\"Arial\">OK</b></body></html>");
 	    setLayout(new GridBagLayout());
 	     gc = new GridBagConstraints();
+	     
+	     
 	   // gc.anchor = GridBagConstraints.LINE_END;
+	    font = new Font("Verdana", Font.BOLD, 12);
+	    
 	    
 	    //top text content field
 	    text  = new JTextArea();
+	    text.setForeground(Color.BLUE);
+	    text.setFont(font);
 	    text.setText("Hello");
-	    
 	    scroll = new JScrollPane(text);
 	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	    text.setMargin(new Insets(10, 10, 10, 10));

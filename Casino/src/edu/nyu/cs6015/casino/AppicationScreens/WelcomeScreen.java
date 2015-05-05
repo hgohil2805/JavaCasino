@@ -82,7 +82,7 @@ public class WelcomeScreen extends JFrame {
 
 	public JPanel createHeading() {
 		JPanel p = new JPanel(new GridLayout(1, 1));
-		JLabel label = new JLabel("<html><body><font size=6 face=\"Arial\">Learn Encryption</body></html>", 
+		JLabel label = new JLabel("<html><body><font size=6 face=\"Arial\">Select A Game From The Menu Below</body></html>", 
 				SwingConstants.CENTER);
 		label.setForeground(Color.WHITE);
 		p.setBackground(color);
