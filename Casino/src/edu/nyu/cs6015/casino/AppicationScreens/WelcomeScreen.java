@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import edu.nyu.cs6015.casino.BlackJackGame;
 import edu.nyu.cs6015.casino.Game;
 import edu.nyu.cs6015.casino.PokerGame;
+import edu.nyu.cs6015.casino.Roulette;
 
 
 
@@ -69,8 +70,9 @@ public class WelcomeScreen extends JFrame {
 					System.out.println("Starting new BlackJack");
 					break;
 				case "Roulette":
-					//a = new PGPAlgorithm();
+					g = new Roulette();
 					System.out.println("Starting new Roulette");
+					new RouletteScreen((Roulette) g);
 					break;
 				}
 			}
