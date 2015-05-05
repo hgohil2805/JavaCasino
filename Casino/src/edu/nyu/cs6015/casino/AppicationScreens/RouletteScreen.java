@@ -20,6 +20,7 @@ import javax.swing.ScrollPaneConstants;
 
 import edu.nyu.cs6015.casino.BlackJackGame;
 import edu.nyu.cs6015.casino.Player;
+import edu.nyu.cs6015.casino.PokerGame;
 import edu.nyu.cs6015.casino.Roulette;
 
 public class RouletteScreen extends JFrame 
@@ -45,6 +46,12 @@ public class RouletteScreen extends JFrame
 	public RouletteScreen(final Roulette g)
 	{
 		currentGameInstance = g;
+		Player one = new Player("ice",23,1000,g);
+		Player two = new Player("iceman",23,1000,g);
+		Player three = new Player("abc",21,1000,g);
+		g.addPlayer(one);
+		g.addPlayer(two);
+		g.addPlayer(three);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridBagLayout());
 		setSize(1000,700);
@@ -90,7 +97,8 @@ public class RouletteScreen extends JFrame
 	    gc.gridy = 4;
 	    add(raiseAmount,gc);
 	    setVisible(true);
-	    //startGame();
+	    currentPlayer = currentGameInstance.getPlayers().get(0);
+	    startGame();
 	}
 	public void addButtons()
 	{
@@ -173,29 +181,62 @@ public class RouletteScreen extends JFrame
 	    add(buttonPanel,gc);
 	}
 	
-	
+	public void startGame()
+	{
+		if(currentPlayer == null)
+		{
+			ArrayList<Player> Winners = currentGameInstance.getWinners(); 
+			text.setText("");
+			text.setText("\n the current winners are");
+			for(Player p : Winners)
+			{
+				text.append("\n"+p);
+				p.Wins(currentGameInstance.getPotMoney()/Winners.size());
+			}
+		}
+		else if(currentPlayer != null)
+		{
+		text.setText("");
+		text.append("\n Hello, "+currentPlayer.getName());
+		numberText.setText("");
+		text.append("\n Select the option from below");
+		}
+	}
 	public void numberBet()
 	{
 		currentPlayer.addCurrentGameBet(raiseAmount.getValue());
 		currentGameInstance.addNumberBet(currentPlayer, Integer.parseInt(numberText.getText()));
+		System.out.println("Current player name"+currentPlayer.getName());
+		Player nextPlayer  = currentGameInstance.getNextPlayer(currentPlayer);
+		currentPlayer = nextPlayer;
+		startGame();
 	}
 	
 	public void oddBet()
 	{
 		currentPlayer.addCurrentGameBet(raiseAmount.getValue());
 		currentGameInstance.addoddBet(currentPlayer);
+		Player nextPlayer  = currentGameInstance.getNextPlayer(currentPlayer);
+		currentPlayer = nextPlayer;
+		startGame();
 	}
 	
 	public void evenBet()
 	{
 		currentPlayer.addCurrentGameBet(raiseAmount.getValue());
 		currentGameInstance.addEvenBet(currentPlayer);
+		Player nextPlayer  = currentGameInstance.getNextPlayer(currentPlayer);
+		currentPlayer = nextPlayer;
+		startGame();
 	}
 	
 	public void redColorBet()
 	{
 		currentPlayer.addCurrentGameBet(raiseAmount.getValue());
 		currentGameInstance.addRedColorBet(currentPlayer);
+		Player nextPlayer  = currentGameInstance.getNextPlayer(currentPlayer);
+		currentPlayer = nextPlayer;
+		startGame();
 	}
 	
 	public void blackColorBet()

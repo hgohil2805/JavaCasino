@@ -1,7 +1,9 @@
 package edu.nyu.cs6015.casino;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Roulette extends Game
 {
@@ -10,11 +12,9 @@ public class Roulette extends Game
 	ArrayList<Player> BlackColorBet = new ArrayList<Player>();
 	ArrayList<Player> oddBet = new ArrayList<Player>();
 	ArrayList<Player> evenBet = new ArrayList<Player>();
-	
-	
+	int[] blackNumbers = {2,4,6,8,10,11,14,15,17,20,22,24,26,28,29,31,33,35};
 	@Override
 	public void startGame() {
-		
 		
 	}
 
@@ -96,6 +96,78 @@ public class Roulette extends Game
 	{
 		return this.evenBet;
 	}
+	
+	public Player getNextPlayer(Player p)
+	{
+		System.out.println(currentPlayers.indexOf(p));
+		if(this.currentPlayers.contains(p))
+		{
+			System.out.println("Player exist on the list");
+			int index = currentPlayers.indexOf(p);
+			if(index == currentPlayers.size() - 1)
+			{
+				System.out.println("Last player");
+				return null;
+			}
+			else 
+				{
+				System.out.println("Next player!");
+				return currentPlayers.get(index + 1); 
+				}
+		}
+		return null;
+	}
+	
+	public boolean isBlackNumber(int num)
+	{
+		return Arrays.asList(blackNumbers).contains(num);
+	}
+	
+	public int getRolledNumber()
+	{
+		Random rand = new Random();
+	    int randomNum = rand.nextInt((37 - 0) + 1) + 0;
+	    return randomNum;
+	}
+	
+	public boolean isLastPlayer(Player p)
+	{
+		if(currentPlayers.indexOf(p) == currentPlayers.size() - 1)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public ArrayList<Player> getWinners()
+	{
+		int rollNumber = getRolledNumber();
+		System.out.println("Rolled Number is" +rollNumber);
+		ArrayList<Player> winners = new ArrayList<Player>();
+		if(numberBet.containsKey(rollNumber))
+		{
+			winners.addAll(numberBet.get(rollNumber));
+		}
+		if(isBlackNumber(rollNumber))
+		{
+			winners.addAll(BlackColorBet);
+		}
+		if(!isBlackNumber(rollNumber))
+		{
+			winners.addAll(redColorBet);
+		}
+		if(rollNumber %2 == 0)
+		{
+			winners.addAll(evenBet);
+		}
+		if(rollNumber %2 != 0)
+		{
+			winners.addAll(oddBet);
+		}
+		return winners;
+	}
+	
+	
 }
 
 
