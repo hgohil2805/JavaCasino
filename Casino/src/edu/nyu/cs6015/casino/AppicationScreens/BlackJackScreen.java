@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
+import edu.nyu.cs6015.casino.BlackJackGame;
 import edu.nyu.cs6015.casino.Card;
 import edu.nyu.cs6015.casino.Game;
 import edu.nyu.cs6015.casino.Player;
@@ -29,10 +31,10 @@ import edu.nyu.cs6015.casino.PokerGame;
 
 
 
-public class PokerHomePage extends JFrame
+public class BlackJackScreen extends JFrame
 {
 	ArrayList<String> holder = new ArrayList<String>();
-	PokerGame currentGameInstance;
+	BlackJackGame currentGameInstance;
 	JTextArea text;
 	Player currentPlayer;
 	GridBagConstraints  gc;
@@ -44,8 +46,10 @@ public class PokerHomePage extends JFrame
 	JButton raiseButton ;
 	JButton foldButton;
 	JButton checkButton;
+	JButton stayButton;
+	JButton hitButton;
 	int count = 0;
-	public PokerHomePage(final PokerGame g)
+	public BlackJackScreen(final BlackJackGame g)
 	{
 		currentGameInstance = g;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,14 +94,14 @@ public class PokerHomePage extends JFrame
 	
 	public void startGame()
 	{	
-		PokerGame g = new PokerGame();
+		BlackJackGame g = new BlackJackGame();
 		Player one = new Player("ice",23,1000,g);
 		Player two = new Player("iceman",23,1000,g);
 		Player three = new Player("abc",21,1000,g);
 		g.addPlayer(one);
 		g.addPlayer(two);
 		g.addPlayer(three);
-		currentGameInstance = (PokerGame) g;
+		currentGameInstance = (BlackJackGame) g;
 		ArrayList<Player> playerCards = currentGameInstance.getFirstRound();
 		this.currentPlayer = playerCards.get(0);
 		this.text.disable();
@@ -121,21 +125,18 @@ public class PokerHomePage extends JFrame
 			public void actionPerformed(ActionEvent arg0) {
 				if(callButton.getText() == "AllIn")
 					{
-					System.out.println("Call callMove");
 					allInMove();
 					
 					}
 				else 
 				{
-					System.out.println("Call allInMove");
 					callMove();
 				}
 			}
 	    	
 	    });
 	    
-	    
-	    callButton.setPreferredSize(new Dimension(150,125));
+	    //callButton.setPreferredSize(new Dimension(150,125));
 	    raiseButton  = new JButton("Raise");
 	    raiseButton.addActionListener(new ActionListener(){
 			@Override
@@ -146,16 +147,7 @@ public class PokerHomePage extends JFrame
 	    });
 	    
 	    panelOne.add(callButton);
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    
 	    panelOne.add(raiseButton);
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
-	    panelOne.add(new JLabel(""));
 	    foldButton = new JButton("Fold");
 	    foldButton.addActionListener(new ActionListener(){
 
@@ -165,25 +157,35 @@ public class PokerHomePage extends JFrame
 			}
 	    	
 	    });
-	    foldButton.setPreferredSize(new Dimension(150,125));
-	    checkButton = new JButton("check");
-	    checkButton.addActionListener(new ActionListener(){
+	    //foldButton.setPreferredSize(new Dimension(150,125));
+	    stayButton = new JButton("Stay");
+	    stayButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				checkMove();
+				StayMove();
 				
 			}
 	    });
 	    
+	    hitButton = new JButton("Hit");
+	    hitButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				hitMove();
+				
+			}
+	    	
+	    });
 	    
 	    //Right panel two
 	    
 	    
-	    JPanel panelTwo = new JPanel(new GridLayout(2,1));
+	    JPanel panelTwo = new JPanel(new GridLayout(3,1));
 	    panelTwo.add(foldButton);
-	    panelTwo.add(checkButton);
-	   
+	    panelTwo.add(stayButton);
+	    panelTwo.add(hitButton);
 	    
 	    
 	    buttonPanel.add(panelOne);
@@ -205,55 +207,66 @@ public class PokerHomePage extends JFrame
 		boolean winnerFound = false;
 		Player p = currentGameInstance.getNextPlayer(currentPlayerChance,move);
 		currentPlayer = p;
+		
 		if(p == null && count == 0)
 		{
-			p = currentGameInstance.getFirstPlayer();
-			currentGameInstance.addNToFlop(3);
-			count ++;
-		}
-		else if(p == null && count == 1)
-		{
-			p = currentGameInstance.getFirstPlayer();
-			currentGameInstance.addNToFlop(1);
-			count ++;
-		}
-		else if(p == null && count == 2)
-		{
-			p = currentGameInstance.getFirstPlayer();
-			currentGameInstance.addNToFlop(1);
-			count++;
-		}
-		else if(p == null && count == 3)
-		{
-			Player winner = currentGameInstance.getWinners();
+			Player winner = currentGameInstance.getWinner();
 			winnerFound = true;
 			text.setText("");
 			text.setText("Winner is: \n" + winner.getName());
 		}
+		
 		if(p != null && !winnerFound)
 		{		
 		currentPlayer = p;
 		text.setText("");
 		text.append("\n "+p.getName());
-		text.append("\nYour current list of cards are ");
-		for(Card c : p.getCards())
+		
+		if(currentGameInstance.getPlayerValue(p) > 0 )
 		{
-			text.append(c +"\t");
+			text.append("\nYour current value of cards is "+currentGameInstance.getPlayerValue(p));
 		}
-		if(currentGameInstance.getFlop().size() > 1)
+		else 
 		{
-			text.append("Cards on the flop");
-		for(Card c : currentGameInstance.getFlop())
+			int value = 0;
+			for(Card c : p.getCards())
 		{
-			text.append("\n" +c);
+			if(c.getValue() == 1)
+				{
+				Object[] options = {"Select Ace as 1",
+                "Select Ace as 11"};
+				int n = JOptionPane.showOptionDialog(this,
+						"You've got an ace, Select the value you want",
+						"Select Value of Ace",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,     //do not use a custom Icon
+						options,  //the titles of buttons
+						options[0]); //default button title
+				if(n == 0)
+				{
+					text.append("\n Selecting value of card as 1");
+					text.append(c + "(1) \t");
+					value += 1;
+				}
+				else if(n == 1)
+				{
+					text.append("\n selecting value of card as 11");
+					text.append(c + "(11) \t");
+					value += 11;
+				}
+				}
+			else
+			{
+				value += c.getValue();
+				text.append(c + "\t");
+			}
 		}
-		}
+			currentGameInstance.setPlayerValue(p, value);
+			}
 		if(currentPlayer.getCurrentRoundBet() < currentGameInstance.getCurrentPotRaise() && currentPlayer.hasMoney())
 		{
 			int moneyLeft = currentPlayer.getTotalMoney() - currentPlayer.getCurrentRoundBet();
-			System.out.println("The money left for the player ," +moneyLeft);
-			System.out.println("Current players current round bet" +currentPlayer.getCurrentRoundBet() );
-			System.out.println("Current round raise" +currentGameInstance.getCurrentPotRaise());
 			callButton.setVisible(true);
 			int amount = currentGameInstance.getCurrentPotRaise() - currentPlayer.getCurrentRoundBet() ;
 			callButton.setText("Call ("+amount +")");
@@ -286,7 +299,7 @@ public class PokerHomePage extends JFrame
 		getNextScreen(currentPlayer,PlayerMove.Call);
 	}
 	
-	public void checkMove()
+	public void StayMove()
 	{
 		getNextScreen(currentPlayer,PlayerMove.Check);	
 	}
@@ -303,11 +316,39 @@ public class PokerHomePage extends JFrame
 		text.setText("");
 		text.append("\n Hello " +currentPlayer.getName());
 		text.append("\n Your current list of cards are \n ");
+		int value = 0;
 		for(Card c :currentPlayer.getCards())
 		{
-			text.append(c + "\t");
+			if(c.getValue() == 1)
+			{
+				Object[] options = {"Select Ace as 1",
+            "Select Ace as 11"};
+			int n = JOptionPane.showOptionDialog(this,
+					"You've got an ace, Select the value you want",
+					"Select Value of Ace",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,     //do not use a custom Icon
+					options,  //the titles of buttons
+					options[0]); //default button title
+			if(n == 0)
+			{
+				value += 1;
+				text.append(c +"(1) \t");
+			}
+			else
+			{
+				value += 11;
+				text.append(c +"(11) \t");
+			}
+			}
+			else 
+			{
+				value += c.getValue();
+				text.append("\n" +c);
+			}	
 		}
-		text.append("\n");
+		currentGameInstance.updatePlayerValue(currentPlayer, value);
 		callButton.setText("AllIn");
 	}
 	
@@ -323,5 +364,27 @@ public class PokerHomePage extends JFrame
 		currentGameInstance.addCurrentPotRaise(raiseAmount);
 		currentGameInstance.addPotMoney(raiseAmount);
 		getNextScreen(currentPlayer,PlayerMove.AllIn);
+	}
+	
+	public void hitMove()
+	{
+		Card c = currentGameInstance.getCurrentDeck().getTop();
+		currentGameInstance.updatePlayerValue(currentPlayer, c.getValue());
+		int value = currentGameInstance.getPlayerValue(currentPlayer);
+		System.out.println(value);
+		if(value == 21)
+		{
+			text.append("\n You have Won");
+		}
+		else if(value > 21)
+		{
+			text.append("\n You have lost!!");
+		}
+		else
+		{
+		currentPlayer.addCard(c);
+		text.append("\n" +c);
+		firstScreen();
+		}
 	}
 }

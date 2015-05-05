@@ -65,6 +65,7 @@ public class WelcomeScreen extends JFrame {
 					
 				case "BlackJack":
 					g = new BlackJackGame();
+					new BlackJackScreen((BlackJackGame) g);
 					System.out.println("Starting new BlackJack");
 					break;
 				case "Roulette":

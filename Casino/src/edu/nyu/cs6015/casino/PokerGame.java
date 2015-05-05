@@ -122,7 +122,7 @@ public class PokerGame extends Game
 				{
 					for(Player p : currentRoundPlayers)
 					{
-						if(p.getCurrentStatus() != PlayerMove.Fold)
+						if(p.getCurrentStatus() != PlayerMove.Fold && !p.getCurrentStatus().equals(PlayerMove.AllIn))
 						{
 							return p;
 						}
@@ -150,12 +150,12 @@ public class PokerGame extends Game
 	
 	public void addCurrentPotRaise(int n)
 	{
-		System.out.println("Adding to current pot"+n);
+		//System.out.println("Adding to current pot"+n);
 		this.currentPotRaise += n; 
 	}
 	public int getCurrentPotRaise()
 	{
-		System.out.println("Clearing current Pot raise");
+		//System.out.println("Clearing current Pot raise");
 		return this.currentPotRaise;
 	}
 	
@@ -164,7 +164,6 @@ public class PokerGame extends Game
 		for(int i=0;i<n;i++)
 		{
 			this.AddToFLop(currentDeck.getTop());
-			System.out.println("flop size from poker" +flop.size());
 		}
 	}
 	

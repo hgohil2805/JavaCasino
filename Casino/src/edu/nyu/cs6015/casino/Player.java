@@ -81,7 +81,6 @@ public class Player
 	{
 		System.out.println("Adding card "+c);
 		this.currentCards.add(c);
-		this.currentHandValue = HandValue.getHandValue(this.currentCards, null, this.currentGame);
 	}
 	
 	public ArrayList<Card> getCards()
@@ -383,6 +382,18 @@ public class Player
 	public void removeCurrentGameBet()
 	{
 		this.currentGameBet = 0;
+	}
+	
+	public boolean hasMoney()
+	{
+		if(this.totalMoney - this.currentRoundBet > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 }
