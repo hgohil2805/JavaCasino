@@ -49,9 +49,9 @@ public class RouletteScreen extends JFrame
 	public RouletteScreen(final Roulette g)
 	{
 		currentGameInstance = g;
-		Player one = new Player("ice",23,1000,g);
-		Player two = new Player("iceman",23,1000,g);
-		Player three = new Player("abc",21,1000,g);
+		Player one = new Player("PlayerOne",23,1000,g);
+		Player two = new Player("PlayerTwo",23,1000,g);
+		Player three = new Player("PlayerThree",21,1000,g);
 		g.addPlayer(one);
 		g.addPlayer(two);
 		g.addPlayer(three);
@@ -195,17 +195,17 @@ public class RouletteScreen extends JFrame
 		{
 			ArrayList<Player> Winners = currentGameInstance.getWinners(); 
 			text.setText("");
-			text.setText("\n the current winners are");
+			text.setText("\nThe current winners are");
 			for(Player p : Winners)
 			{
-				text.append("\n"+p);
+				text.append("\n"+p.getName());
 				p.Wins(currentGameInstance.getPotMoney()/Winners.size());
 			}
 		}
 		else if(currentPlayer != null)
 		{
 		text.setText("");
-		text.append("\n Hello, "+currentPlayer.getName());
+		text.append("\nHello, "+currentPlayer.getName());
 		numberText.setText("");
 		text.append("\n Select the option from below");
 		}

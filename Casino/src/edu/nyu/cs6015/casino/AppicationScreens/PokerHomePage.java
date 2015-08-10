@@ -99,9 +99,9 @@ public class PokerHomePage extends JFrame
 	public void startGame()
 	{	
 		PokerGame g = new PokerGame();
-		Player one = new Player("ice",23,1000,g);
-		Player two = new Player("iceman",23,1000,g);
-		Player three = new Player("abc",21,1000,g);
+		Player one = new Player("PlayerOne",23,1000,g);
+		Player two = new Player("PlayerTwo",23,1000,g);
+		Player three = new Player("PlayerThree",21,1000,g);
 		g.addPlayer(one);
 		g.addPlayer(two);
 		g.addPlayer(three);
